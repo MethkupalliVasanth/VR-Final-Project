@@ -1,0 +1,76 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TargetHunter_trigger: MonoBehaviour {
+
+
+	public Transform target;
+	public Transform t1,t2,t3,t4;
+	Rigidbody rb;
+	Vector3 heading, newDir, heading1, heading2, heading3, heading4;
+	float power, rSpeed;
+	public bool moving, moving1, moving2;
+
+	void Start () {
+		rb = GetComponent<Rigidbody>();
+		power = 15f;
+		rSpeed = 5f;
+	}
+	void FixedUpdate () {
+		heading = target.position - transform.position;
+		heading1 = t1.position - transform.position;
+		heading2 = t2.position - transform.position;
+		heading3 = t3.position - transform.position;
+		heading4 = t4.position - transform.position;
+		Debug.Log ("heading.magnitude for = " + heading.magnitude);
+
+		if (Input.GetKey("up"))
+			print("up arrow key is held down");
+
+		if (Input.GetKey("down"))
+			print("down arrow key is held down");
+
+		if (moving) {
+
+			rb.AddForce (heading1 * power * Time.deltaTime);
+			Debug.DrawRay (transform.position, heading1, Color.red, .2f);
+			newDir = Vector3.RotateTowards (transform.forward, heading1, rSpeed * Time.deltaTime, 5f);
+			transform.rotation = Quaternion.LookRotation (newDir);
+
+		}
+
+		if(!moving) {
+
+			rb.AddForce (heading2 * power * Time.deltaTime);
+			Debug.DrawRay (transform.position, heading2, Color.red, .2f);
+			newDir = Vector3.RotateTowards (transform.forward, heading2, rSpeed * Time.deltaTime, 5f);
+			transform.rotation = Quaternion.LookRotation (newDir);
+		}
+
+	
+
+
+	}
+
+
+	void OnTriggerEnter(Collider otherObject){
+		if(otherObject.gameObject.tag == "Player" ){
+			moving = true;
+
+		}
+	}
+
+	void OnTriggerExit(Collider otherObject){
+		if(otherObject.gameObject.tag == "Player" ){
+			moving = false;
+		}
+	}
+
+
+
+
+}
+
+
+
